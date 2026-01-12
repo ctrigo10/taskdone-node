@@ -138,8 +138,15 @@ async function getTasks(req, res, next) {
   }
 }
 
-async function getUsers(req, res) {
-  const { page, limit, orderBy, orderDir = 'DESC', search, status } = req.query;
+async function getUsers(req, res, next) {
+  const {
+    page = 1,
+    limit = 10,
+    orderBy,
+    orderDir = 'DESC',
+    search,
+    status,
+  } = req.query;
   const order =
     orderBy && orderDir ? [[orderBy, orderDir.toUpperCase()]] : [['id', 'ASC']]; // Orden por defecto
   const where = {};
@@ -150,7 +157,6 @@ async function getUsers(req, res) {
   }
 
   if (status) {
-    console.log('stat', status)
     if (status !== Status.ACTIVE && status !== Status.INACTIVE)
       return res.status(400).json({
         message: `Invalid status, must be ${Status.ACTIVE} or ${Status.INACTIVE}`,
@@ -178,6 +184,7 @@ async function getUsers(req, res) {
     });
   } catch (error) {
     next(error);
+    console.log(error);
   }
 }
 
