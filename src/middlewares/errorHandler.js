@@ -5,6 +5,10 @@ export default function errorHandler(err, req, res, next) {
   console.log('error nombre: ', err.name);
   logger.error(err.message);
 
+  if (err.status) {
+    return res.status(err.status).json({ message: err.message });
+  }
+
   if (err.name === 'ValidationError') {
     res.status(400).json({ message: err.message });
   } else if (err.name === 'JsonWebTokenError') {

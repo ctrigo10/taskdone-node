@@ -49,18 +49,13 @@ User.hasMany(Task);
 Task.belongsTo(User);
 
 User.beforeCreate(async (user) => {
-  try {
+  if (user.password) {
     user.password = await encriptar(user.password);
-  } catch (error) {
-    next(error);
   }
 });
 
 User.beforeUpdate(async (user) => {
-  console.log('entroooo')
-  try {
+  if (user.changed('password') && user.password) {
     user.password = await encriptar(user.password);
-  } catch (error) {
-    next(error);
   }
 });
